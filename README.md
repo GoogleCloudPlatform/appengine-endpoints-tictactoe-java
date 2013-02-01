@@ -13,19 +13,24 @@ Google Cloud Endpoints, App Engine, and Java.
 ## APIs
 - [Google Cloud Endpoints][3]
 
-## Configuration Instructions
-- Update the value of `application` in `appengine-web.xml` to the app ID you
-	have registered in the App Engine admin console and would like to use to host
-	your instance of this sample.
-- Update the values in `src/com/google/devrel/samples/ttt/spi/Ids.java` to
-	reflect the respective client IDs you have registered in the
-	[APIs Console][4].
-- This sample does not bundle a copy of the App Engine SDK. You will need to
-	supply your own and include required files in requisite locations in your
-	`war` directory.
+## Setup Instructions
+1. Import the project into Eclipse.
+2. Make sure the App Engine SDK jars are added to the `war/WEB-INF/lib`
+   directory, either by adding them by hand, or having Eclipse do it. (An easy)
+   way to do this in Eclipse is to unset and reset whether or not the project
+   uses Google App Engine.
+3. Update the value of `application` in `appengine-web.xml` to the app ID you
+   have registered in the App Engine admin console and would like to use to host
+   your instance of this sample.
+4. Update the values in `src/com/google/devrel/samples/ttt/spi/Ids.java` to
+   reflect the respective client IDs you have registered in the
+   [APIs Console][4].
+5. Run the application, and ensure it's running by visiting your local server's
+   address (by default [localhost:8888][5].)
 
 
 [1]: https://developers.google.com/appengine
 [2]: http://java.com/en/
 [3]: https://developers.google.com/appengine/docs/java/endpoints/
 [4]: https://code.google.com/apis/console
+[5]: https://localhost:8888/
