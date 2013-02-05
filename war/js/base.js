@@ -155,7 +155,7 @@ google.devrel.samples.ttt.clickSquare = function(e) {
     button.innerHTML = 'X';
     button.removeEventListener('click', google.devrel.samples.ttt.clickSquare);
     google.devrel.samples.ttt.waitingForMove = false;
-    
+
     var boardString = google.devrel.samples.ttt.getBoardString();
     var status = google.devrel.samples.ttt.checkForVictory(boardString);
     if (status == google.devrel.samples.ttt.NOT_DONE) {
@@ -262,34 +262,34 @@ google.devrel.samples.ttt.setBoardFilling = function(boardString) {
  */
 google.devrel.samples.ttt.checkForVictory = function(boardString) {
   var status = google.devrel.samples.ttt.NOT_DONE;
-  
+
   // Checks rows and columns.
   for (var i = 0; i < 3; i++) {
     var rowString = google.devrel.samples.ttt.getStringsAtPositions(
         boardString, i*3, (i*3)+1, (i*3)+2);
     status |= google.devrel.samples.ttt.checkSectionVictory(rowString);
-    
+
     var colString = google.devrel.samples.ttt.getStringsAtPositions(
       boardString, i, i+3, i+6);
     status |= google.devrel.samples.ttt.checkSectionVictory(colString);
   }
-  
+
   // Check top-left to bottom-right.
   var diagonal = google.devrel.samples.ttt.getStringsAtPositions(boardString,
       0, 4, 8);
   status |= google.devrel.samples.ttt.checkSectionVictory(diagonal);
-  
+
   // Check top-right to bottom-left.
   diagonal = google.devrel.samples.ttt.getStringsAtPositions(boardString, 2,
       4, 6);
   status |= google.devrel.samples.ttt.checkSectionVictory(diagonal);
-  
+
   if (status == google.devrel.samples.ttt.NOT_DONE) {
     if (boardString.indexOf('-') == -1) {
       return google.devrel.samples.ttt.TIE;
     }
   }
-  
+
   return status;
 };
 
@@ -360,18 +360,24 @@ google.devrel.samples.ttt.getStringsAtPositions = function(boardString, first,
  * @param {string} apiRoot Root of the API's path.
  */
 google.devrel.samples.ttt.init = function(apiRoot) {
-  gapi.client.load('tictactoe', 'v1', function() {}, apiRoot);
-  gapi.client.load('oauth2', 'v2', function() {
-    google.devrel.samples.ttt.signin(true,
-        google.devrel.samples.ttt.userAuthed);
-  });
-  
+  // Loads the OAuth and Tic Tac Toe APIs asynchronously, and triggers login
+  // when they have completed.
+  var apisToLoad = 2;
+  var callback = function() {
+    if (--apisToLoad == 0) {
+      google.devrel.samples.ttt.signin(true,
+          google.devrel.samples.ttt.userAuthed);
+    }
+  }
+  gapi.client.load('tictactoe', 'v1', callback, apiRoot);
+  gapi.client.load('oauth2', 'v2', callback);
+
   var buttons = document.querySelectorAll('td');
   for (var i = 0; i < buttons.length; i++) {
     var button = buttons[i];
     button.addEventListener('click', google.devrel.samples.ttt.clickSquare);
   }
-  
+
   var reset = document.querySelector('#restartButton');
   reset.addEventListener('click', google.devrel.samples.ttt.resetGame);
 };
