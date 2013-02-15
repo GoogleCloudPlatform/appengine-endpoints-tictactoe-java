@@ -362,13 +362,15 @@ google.devrel.samples.ttt.getStringsAtPositions = function(boardString, first,
 google.devrel.samples.ttt.init = function(apiRoot) {
   // Loads the OAuth and Tic Tac Toe APIs asynchronously, and triggers login
   // when they have completed.
-  var apisToLoad = 2;
+  var apisToLoad;
   var callback = function() {
     if (--apisToLoad == 0) {
       google.devrel.samples.ttt.signin(true,
           google.devrel.samples.ttt.userAuthed);
     }
   }
+
+  apisToLoad = 2; // must match number of calls to gapi.client.load()
   gapi.client.load('tictactoe', 'v1', callback, apiRoot);
   gapi.client.load('oauth2', 'v2', callback);
 
