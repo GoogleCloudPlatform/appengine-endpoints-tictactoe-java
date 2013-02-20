@@ -27,6 +27,7 @@ Google Cloud Endpoints, App Engine, and Java.
    [APIs Console][4].
 5. Run the application, and ensure it's running by visiting your local server's
    address (by default [localhost:8888][5].)
+6. Deploy your application.
 
 
 [1]: https://developers.google.com/appengine
