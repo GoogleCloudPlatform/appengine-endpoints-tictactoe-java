@@ -11,11 +11,6 @@
     <servlet-name>SystemServiceServlet</servlet-name>
     <url-pattern>/_ah/spi/*</url-pattern>
   </servlet-mapping>
-  <static-files>
-    <include path="/js/**.js"/>
-    <include path="/css/**.css"/>
-    <include path="/images/**.gif"/>
-  </static-files>
   <welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
