@@ -1,17 +1,4 @@
-/* Copyright 2013 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+// Copyright 2012 Google Inc. All Rights Reserved.
 
 /**
  * @fileoverview
@@ -32,26 +19,6 @@ google.devrel.samples = google.devrel.samples || {};
 
 /** TicTacToe namespace for this sample. */
 google.devrel.samples.ttt = google.devrel.samples.ttt || {};
-
-/**
- * Client ID of the application (from the APIs Console).
- * @type {string}
- */
-google.devrel.samples.ttt.CLIENT_ID =
-    'replace this with your web application client ID';
-
-/**
- * Scopes used by the application.
- * @type {string}
- */
-google.devrel.samples.ttt.SCOPES =
-    'https://www.googleapis.com/auth/userinfo.email';
-
-/**
- * Response type of the auth token.
- * @type {string}
- */
-google.devrel.samples.ttt.RESPONSE_TYPE = 'token id_token';
 
 /**
  * Status for an unfinished game.
@@ -82,10 +49,10 @@ google.devrel.samples.ttt.TIE = 3;
  * @type {Array.number}
  */
 google.devrel.samples.ttt.STATUS_STRINGS = [
-    "NOT_DONE",
-    "WON",
-    "LOST",
-    "TIE"
+    'NOT_DONE',
+    'WON',
+    'LOST',
+    'TIE'
 ];
 
 /**
@@ -101,48 +68,29 @@ google.devrel.samples.ttt.signedIn = false;
 google.devrel.samples.ttt.waitingForMove = true;
 
 /**
+ * Signs the user out.
+ */
+google.devrel.samples.ttt.signout = function() {
+  document.getElementById('signinButtonContainer').classList.add('visible');
+  document.getElementById('signedInStatus').classList.remove('visible');
+  google.devrel.samples.ttt.setBoardEnablement(false);
+  google.devrel.samples.ttt.signedIn = false;
+}
+
+/**
  * Loads the application UI after the user has completed auth.
  */
 google.devrel.samples.ttt.userAuthed = function() {
   var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
     if (!resp.code) {
-      var token = gapi.auth.getToken();
-      token.access_token = token.id_token;
-      gapi.auth.setToken(token);
       google.devrel.samples.ttt.signedIn = true;
       document.getElementById('userLabel').innerHTML = resp.email;
-      document.getElementById('signinButton').innerHTML = 'Sign out';
       google.devrel.samples.ttt.setBoardEnablement(true);
       google.devrel.samples.ttt.queryScores();
+    } else {
+      google.devrel.samples.ttt.signout();
     }
   });
-};
-
-/**
- * Handles the auth flow, with the given value for immediate mode.
- * @param {boolean} mode Whether or not to use immediate mode.
- * @param {Function} callback Callback to call on completion.
- */
-google.devrel.samples.ttt.signin = function(mode, callback) {
-  gapi.auth.authorize({client_id: google.devrel.samples.ttt.CLIENT_ID,
-      scope: google.devrel.samples.ttt.SCOPES, immediate: mode,
-      response_type: google.devrel.samples.ttt.RESPONSE_TYPE},
-      callback);
-};
-
-/**
- * Presents the user with the authorization popup.
- */
-google.devrel.samples.ttt.auth = function() {
-  if (!google.devrel.samples.ttt.signedIn) {
-    google.devrel.samples.ttt.signin(false,
-        google.devrel.samples.ttt.userAuthed);
-  } else {
-    google.devrel.samples.ttt.signedIn = false;
-    document.getElementById('userLabel').innerHTML = '(not signed in)';
-    document.getElementById('signinButton').innerHTML = 'Sign in';
-    google.devrel.samples.ttt.setBoardEnablement(false);
-  }
 };
 
 /**
@@ -365,8 +313,7 @@ google.devrel.samples.ttt.init = function(apiRoot) {
   var apisToLoad;
   var callback = function() {
     if (--apisToLoad == 0) {
-      google.devrel.samples.ttt.signin(true,
-          google.devrel.samples.ttt.userAuthed);
+      google.devrel.samples.ttt.userAuthed();
     }
   }
 
