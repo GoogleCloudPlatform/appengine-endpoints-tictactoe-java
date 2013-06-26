@@ -36,6 +36,42 @@ google.devrel.samples.ttt.SCOPES =
     'https://www.googleapis.com/auth/plus.login';
 
 /**
+ * Parses email from the claim set of a JWT ID token.
+ *
+ * NOTE: We are not validating the ID token since from a trusted source.
+ *       We are simply parsed the value from the JWT.
+ *
+ * See http://www.tbray.org/ongoing/When/201x/2013/04/04/ID-Tokens
+ * or
+ * http://openid.net/specs/openid-connect-messages-1_0.html#StandardClaims
+ * for more info.
+ *
+ * @param {string} idToken A base64 JWT containing a user ID token.
+ * @return {string} The email parsed from the claim set, else undefined
+ *                  if one can't be parsed.
+ */
+google.devrel.samples.ttt.getEmailFromIDToken = function(idToken) {
+  if (typeof idToken !== 'string') {
+    return;
+  }
+
+  var segments = idToken.split('.');
+  if segments.length !== 3 {
+    return;
+  }
+
+  try {
+    var claimSet = JSON.parse(atob(claimSet));
+  } catch (e) {
+    return;
+  }
+
+  if (claimSet.email && typeof claimSet.email === 'string') {
+    return claimSet.email;
+  }
+}
+
+/**
  * Handles the Google+ Sign In response.
  *
  * Success calls google.devrel.samples.ttt.init. Failure makes the Sign-In
@@ -45,8 +81,11 @@ google.devrel.samples.ttt.SCOPES =
  *                            Sign In attempt.
  */
 google.devrel.samples.ttt.signinCallback = function(authResult) {
-  if (authResult.access_token) {
-    google.devrel.samples.ttt.init('//' + window.location.host + '/_ah/api');
+  var tokenEmail = google.devrel.samples.ttt.getEmailFromIDToken(
+      authResult.id_token);
+  if (authResult.access_token && tokenEmail) {
+    google.devrel.samples.ttt.init('//' + window.location.host + '/_ah/api',
+                                   tokenEmail);
 
     document.getElementById('signinButtonContainer').classList.remove(
         'visible');

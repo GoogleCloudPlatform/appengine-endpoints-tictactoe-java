@@ -78,22 +78,6 @@ google.devrel.samples.ttt.signout = function() {
 }
 
 /**
- * Loads the application UI after the user has completed auth.
- */
-google.devrel.samples.ttt.userAuthed = function() {
-  var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
-    if (!resp.code) {
-      google.devrel.samples.ttt.signedIn = true;
-      document.getElementById('userLabel').innerHTML = resp.email;
-      google.devrel.samples.ttt.setBoardEnablement(true);
-      google.devrel.samples.ttt.queryScores();
-    } else {
-      google.devrel.samples.ttt.signout();
-    }
-  });
-};
-
-/**
  * Handles a square click.
  * @param {MouseEvent} e Mouse click event.
  */
@@ -306,20 +290,18 @@ google.devrel.samples.ttt.getStringsAtPositions = function(boardString, first,
 /**
  * Initializes the application.
  * @param {string} apiRoot Root of the API's path.
+ * @param {string} tokenEmail The email parsed from the auth/ID token.
  */
-google.devrel.samples.ttt.init = function(apiRoot) {
-  // Loads the OAuth and Tic Tac Toe APIs asynchronously, and triggers login
-  // when they have completed.
-  var apisToLoad;
+google.devrel.samples.ttt.init = function(apiRoot, tokenEmail) {
+  // Loads the Tic Tac Toe API asynchronously, and triggers login
+  // in the UI when loading has completed.
   var callback = function() {
-    if (--apisToLoad == 0) {
-      google.devrel.samples.ttt.userAuthed();
-    }
+    google.devrel.samples.ttt.signedIn = true;
+    document.getElementById('userLabel').innerHTML = tokenEmail;
+    google.devrel.samples.ttt.setBoardEnablement(true);
+    google.devrel.samples.ttt.queryScores();
   }
-
-  apisToLoad = 2; // must match number of calls to gapi.client.load()
   gapi.client.load('tictactoe', 'v1', callback, apiRoot);
-  gapi.client.load('oauth2', 'v2', callback);
 
   var buttons = document.querySelectorAll('td');
   for (var i = 0; i < buttons.length; i++) {
