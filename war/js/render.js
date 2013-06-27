@@ -56,12 +56,12 @@ google.devrel.samples.ttt.getEmailFromIDToken = function(idToken) {
   }
 
   var segments = idToken.split('.');
-  if segments.length !== 3 {
+  if (segments.length !== 3) {
     return;
   }
 
   try {
-    var claimSet = JSON.parse(atob(claimSet));
+    var claimSet = JSON.parse(atob(segments[1]));
   } catch (e) {
     return;
   }
