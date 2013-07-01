@@ -26,7 +26,7 @@ Google Cloud Endpoints, App Engine, and Java.
    reflect the respective client IDs you have registered in the
    [APIs Console][4].
 1. Update the value of `google.devrel.samples.ttt.CLIENT_ID` in
-   `war/js/base.js` to reflect the web client ID you have registered in the
+   [`war/js/render.js`][6] to reflect the web client ID you have registered in the
    [APIs Console][4].
 1. Run the application, and ensure it's running by visiting your local server's
    address (by default [localhost:8888][5].)
@@ -38,3 +38,4 @@ Google Cloud Endpoints, App Engine, and Java.
 [3]: https://developers.google.com/appengine/docs/java/endpoints/
 [4]: https://code.google.com/apis/console
 [5]: https://localhost:8888/
+[6]: https://github.com/GoogleCloudPlatform/appengine-endpoints-tictactoe-java/blob/master/war/js/render.js
