@@ -48,12 +48,6 @@ google.devrel.samples.ttt.SCOPES =
     'https://www.googleapis.com/auth/userinfo.email';
 
 /**
- * Response type of the auth token.
- * @type {string}
- */
-google.devrel.samples.ttt.RESPONSE_TYPE = 'token id_token';
-
-/**
  * Status for an unfinished game.
  * @type {number}
  */
@@ -106,9 +100,6 @@ google.devrel.samples.ttt.waitingForMove = true;
 google.devrel.samples.ttt.userAuthed = function() {
   var request = gapi.client.oauth2.userinfo.get().execute(function(resp) {
     if (!resp.code) {
-      var token = gapi.auth.getToken();
-      token.access_token = token.id_token;
-      gapi.auth.setToken(token);
       google.devrel.samples.ttt.signedIn = true;
       document.getElementById('userLabel').innerHTML = resp.email;
       document.getElementById('signinButton').innerHTML = 'Sign out';
@@ -125,8 +116,7 @@ google.devrel.samples.ttt.userAuthed = function() {
  */
 google.devrel.samples.ttt.signin = function(mode, callback) {
   gapi.auth.authorize({client_id: google.devrel.samples.ttt.CLIENT_ID,
-      scope: google.devrel.samples.ttt.SCOPES, immediate: mode,
-      response_type: google.devrel.samples.ttt.RESPONSE_TYPE},
+      scope: google.devrel.samples.ttt.SCOPES, immediate: mode},
       callback);
 };
 

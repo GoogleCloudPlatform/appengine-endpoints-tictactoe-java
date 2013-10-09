@@ -28,7 +28,10 @@ import com.google.devrel.samples.ttt.Board;
  */
 @Api(
     name = "tictactoe",
-    version = "v1"
+    version = "v1",
+    scopes = {Constants.EMAIL_SCOPE},
+    clientIds = {Constants.WEB_CLIENT_ID, Constants.ANDROID_CLIENT_ID, Constants.IOS_CLIENT_ID},
+    audiences = {Constants.ANDROID_AUDIENCE}
 )
 public class BoardV1 {
   public static final char X = 'X';
