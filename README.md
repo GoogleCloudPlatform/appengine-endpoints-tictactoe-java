@@ -1,6 +1,10 @@
 appengine-endpoints-backend-java
 ================================
 
+![status: inactive](https://img.shields.io/badge/status-inactive-red.svg)
+
+This project is no longer actively developed or maintained.
+
 This application implements a simple backend for a Tic Tac Toe game using
 Google Cloud Endpoints, App Engine, and Java.
 
